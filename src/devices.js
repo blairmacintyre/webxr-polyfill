@@ -15,10 +15,10 @@
 
 import XRDevice from './api/XRDevice';
 
-import CardboardXRDevice from './devices/CardboardXRDevice';
-import WebVRDevice from './devices/WebVRDevice';
+// import CardboardXRDevice from './devices/CardboardXRDevice';
+// import WebVRDevice from './devices/WebVRDevice';
 
-import { isMobile } from './utils';
+// import { isMobile } from './utils';
 
 /**
  * Queries browser to see if any XRDevice exists.
@@ -35,23 +35,23 @@ const getXRDevice = async function (global) {
   return device;
 };
 
-/**
- * Queries browser to see if any VRDisplay exists.
- * Resolves to a polyfilled XRDevice or null.
- */
-const getVRDisplay = async function (global) {
-  let device = null;
-  if ('getVRDisplays' in global.navigator) {
-    try {
-      const displays = await global.navigator.getVRDisplays();
-      if (displays && displays.length) {
-        device = new WebVRDevice(global, displays[0]);
-      }
-    } catch (e) {}
-  }
+// /**
+//  * Queries browser to see if any VRDisplay exists.
+//  * Resolves to a polyfilled XRDevice or null.
+//  */
+// const getVRDisplay = async function (global) {
+//   let device = null;
+//   if ('getVRDisplays' in global.navigator) {
+//     try {
+//       const displays = await global.navigator.getVRDisplays();
+//       if (displays && displays.length) {
+//         device = new WebVRDevice(global, displays[0]);
+//       }
+//     } catch (e) {}
+//   }
 
-  return device;
-};
+//   return device;
+// };
 
 /**
  * Return polyfilled XRDevices based off of configuration
@@ -71,30 +71,30 @@ export const requestDevice = async function (global, config) {
     return device;
   }
 
-  // If no native XR devices found, check for a 1.1 VRDisplay.
-  if (config.webvr) {
-    device = await getVRDisplay(global);
-    if (device) {
-      return new XRDevice(device);
-    }
-  }
+  // // If no native XR devices found, check for a 1.1 VRDisplay.
+  // if (config.webvr) {
+  //   device = await getVRDisplay(global);
+  //   if (device) {
+  //     return new XRDevice(device);
+  //   }
+  // }
 
-  // If cardboard is enabled, there are no native 1.1 VRDisplays,
-  // and we're on mobile, provide a CardboardXRDevice.
-  if (config.cardboard && isMobile(global)) {
-    // If we're on Cardboard, make sure that VRFrameData is a global
-    if (!global.VRFrameData) {
-      global.VRFrameData = function () {
-        this.rightViewMatrix = new Float32Array(16);
-        this.leftViewMatrix = new Float32Array(16);
-        this.rightProjectionMatrix = new Float32Array(16);
-        this.leftProjectionMatrix = new Float32Array(16);
-        this.pose = null;
-      };
-    }
+  // // If cardboard is enabled, there are no native 1.1 VRDisplays,
+  // // and we're on mobile, provide a CardboardXRDevice.
+  // if (config.cardboard && isMobile(global)) {
+  //   // If we're on Cardboard, make sure that VRFrameData is a global
+  //   if (!global.VRFrameData) {
+  //     global.VRFrameData = function () {
+  //       this.rightViewMatrix = new Float32Array(16);
+  //       this.leftViewMatrix = new Float32Array(16);
+  //       this.rightProjectionMatrix = new Float32Array(16);
+  //       this.leftProjectionMatrix = new Float32Array(16);
+  //       this.pose = null;
+  //     };
+  //   }
 
-    return new XRDevice(new CardboardXRDevice(global));
-  }
+  //   return new XRDevice(new CardboardXRDevice(global));
+  // }
 
   return null;
 }
