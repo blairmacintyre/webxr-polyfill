@@ -93,7 +93,7 @@ Check the [.babelrc](.babelrc) configuration and ensure the polyfill runs in wha
   * If `WebGLRenderingContext.prototype.setCompatibleXRDevice` is not a function:
     * Polyfill all `WebGLRenderingContext.prototype.setCompatibleXRDevice` and a creation attribute
 for `{ compatibleXrDevice }`.
-    * Polyfills `HTMLCanvasElement.prototype.getContext` to support a `xrpresent` type. Returns a polyfilled `XRPresentationContext` used for mirroring and magic window.
+    * Polyfills `HTMLCanvasElement.prototype.getContext` to support a `xrpresent` type. Returns a polyfilled `XRPresentationContext` (via `CanvasRenderingContext2D` or `ImageBitmapRenderingContext` if supported) used for mirroring and magic window.
 * If `'xr' in navigator === true`, `config.cardboard === true` and on mobile:
   * Overwrite `navigator.xr.requestDevice` so that a native `XRDevice` is returned if it exists, and if not, return a polyfilled `XRDevice` based on [CardboardVRDisplay].
 
@@ -110,7 +110,7 @@ In the future, when the WebXR API is implemented on a platform but inconsistent 
 This program is free software for both commercial and non-commercial use,
 distributed under the [Apache 2.0 License](LICENSE).
 
-[webxr-spec]: https://immersive-web.github.io/webxr/spec/latest/
+[webxr-spec]: https://immersive-web.github.io/webxr/
 [webvr-spec]: https://immersive-web.github.io/webvr/spec/1.1/
 [webvr-polyfill]: https://github.com/immersive-web/webvr-polyfill
 [npm]: https://www.npmjs.com
